@@ -164,6 +164,20 @@ public class TextFileReader {
 	}
 
 	/**
+	 * Read text as list from file line by line with range
+	 * 
+	 * @param file
+	 * @param beginLineNum
+	 *            line number starts with 0
+	 * @param endLineNum
+	 * @return
+	 * @throws IOException
+	 */
+	public List<String> readTextAsListWithRange(File file, int beginLineNum, int endLineNum) throws IOException {
+		return readTextAsListWithRange(file, null, beginLineNum, endLineNum);
+	}
+
+	/**
 	 * Read whole text as list from file line by line
 	 * 
 	 * @param file
@@ -181,6 +195,26 @@ public class TextFileReader {
 	}
 
 	/**
+	 * Read text as list from file line by line with range
+	 * 
+	 * @param file
+	 * @param charset
+	 *            specify character set like 'UTF-8'
+	 * @param beginLineNum
+	 *            line number starts with 0
+	 * @param endLineNum
+	 * @return
+	 * @throws IOException
+	 */
+	public List<String> readTextAsListWithRange(File file, String charset, int beginLineNum, int endLineNum) throws IOException {
+
+		FileInputStream fis = new FileInputStream(file);
+
+		return readTextAsListWithRange(fis, charset, beginLineNum, endLineNum);
+
+	}
+
+	/**
 	 * Read whole text as list from inputStream line by line
 	 * 
 	 * @param is
@@ -189,8 +223,33 @@ public class TextFileReader {
 	 * @throws IOException
 	 */
 	public List<String> readTextAsList(InputStream is, String charset) throws IOException {
+		return readTextAsListWithRange(is, charset, -1, -1);
+	}
+
+	/**
+	 * Read text as list from inputStream line by line with range
+	 * 
+	 * @param is
+	 * @param charset
+	 * @param beginLineNum
+	 *            line number starts with 0
+	 * @param endLineNum
+	 * @return
+	 * @throws IOException
+	 */
+	public List<String> readTextAsListWithRange(InputStream is, String charset, int beginLineNum, int endLineNum) throws IOException {
+
+		long crrReadingLineNum = 0;
 
 		final List<String> lineList = new ArrayList<String>();
+
+		if (beginLineNum < 0) {
+			beginLineNum = 0;
+		}
+
+		if (beginLineNum > endLineNum) {
+			return lineList;
+		}
 
 		InputStreamReader isr = null;
 		BufferedReader br = null;
@@ -208,7 +267,33 @@ public class TextFileReader {
 			String line;
 
 			while ((line = br.readLine()) != null) {
-				lineList.add(line);
+
+				boolean isSkip = false;
+				boolean isFinish = false;
+
+				if (beginLineNum <= crrReadingLineNum) {
+					isSkip = false;
+				} else {
+					isSkip = true;
+				}
+
+				if (crrReadingLineNum <= endLineNum || endLineNum < 0) {
+					isFinish = false;
+				} else {
+					isFinish = true;
+				}
+
+				if (isFinish) {
+					break;
+				}
+				if (isSkip) {
+
+				} else {
+					lineList.add(line);
+				}
+
+				crrReadingLineNum++;
+
 			}
 
 		} finally {
