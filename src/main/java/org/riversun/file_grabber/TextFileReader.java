@@ -140,7 +140,7 @@ public class TextFileReader {
 	}
 
 	/**
-	 * Read whole text from file line by line
+	 * Read whole text from file char by char
 	 * 
 	 * @param file
 	 * @param charset
@@ -150,6 +150,37 @@ public class TextFileReader {
 	 */
 	public String readText(File file, String charset) throws IOException {
 		return readTextCharByChar(file, charset);
+	}
+
+	/**
+	 * Read whole text from file char by char
+	 * 
+	 * @param is
+	 * @param charset
+	 * @return
+	 * @throws IOException
+	 */
+	public String readText(InputStream is, String charset) throws IOException {
+		return readTextCharByChar(is, charset);
+	}
+
+	/**
+	 * Read whole text from resource directory
+	 * 
+	 * @param clazz
+	 * @param fileName
+	 * @param charset
+	 * @return
+	 * @throws IOException
+	 * <br>
+	 * <code>
+	 * Example
+	 * tr.readTextFromResource(this.getClass(),"res.properties","UTF-8");
+	 * </code>
+	 */
+	public String readTextFromResource(Class<?> clazz, String fileName, String charset) throws IOException {
+		InputStream is = clazz.getResourceAsStream(fileName);
+		return readText(is, charset);
 	}
 
 	/**

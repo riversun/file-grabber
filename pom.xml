@@ -5,7 +5,7 @@
 
 	<groupId>org.riversun</groupId>
 	<artifactId>file-grabber</artifactId>
-	<version>0.2.0</version>
+	<version>0.3.0</version>
 	<packaging>jar</packaging>
 	<name>file-grabber</name>
 	<description>Easy to handle and manipulate the text file
@@ -75,8 +75,8 @@
 
 				<configuration>
 
-					<source>1.5</source>
-					<target>1.5</target>
+					<source>1.8</source>
+					<target>1.8</target>
 
 					<excludes>
 						<exclude>examples/**/*</exclude>
