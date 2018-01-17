@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -40,327 +41,343 @@ import java.util.List;
  */
 public class TextFileReader {
 
-	/**
-	 * Read whole text char by char
-	 * 
-	 * @param file
-	 * @return
-	 * @throws IOException
-	 */
-	public String readTextCharByChar(File file) throws IOException {
-		return readTextCharByChar(file, null);
-	}
+  /**
+   * Read whole text char by char
+   * 
+   * @param file
+   * @return
+   * @throws IOException
+   */
+  public String readTextCharByChar(File file) throws IOException {
+    return readTextCharByChar(file, null);
+  }
 
-	/**
-	 * Read whole text from file char by char
-	 * 
-	 * @param file
-	 * @param charset
-	 *            specify character set like 'UTF-8'
-	 * @return
-	 * @throws IOException
-	 */
-	public String readTextCharByChar(File file, String charset) throws IOException {
+  /**
+   * Read whole text from file char by char
+   * 
+   * @param file
+   * @param charset
+   *          specify character set like 'UTF-8'
+   * @return
+   * @throws IOException
+   */
+  public String readTextCharByChar(File file, String charset) throws IOException {
 
-		FileInputStream fis = null;
+    FileInputStream fis = null;
 
-		fis = new FileInputStream(file);
+    fis = new FileInputStream(file);
 
-		return readTextCharByChar(fis, charset);
+    return readTextCharByChar(fis, charset);
 
-	}
+  }
 
-	/**
-	 * Read whole text from input stream char by char
-	 * 
-	 * @param is
-	 * @param charset
-	 *            specify character set like 'UTF-8'
-	 * @return
-	 * @throws IOException
-	 */
-	public String readTextCharByChar(InputStream is, String charset) throws IOException {
+  /**
+   * Read whole text from input stream char by char
+   * 
+   * @param is
+   * @param charset
+   *          specify character set like 'UTF-8'
+   * @return
+   * @throws IOException
+   */
+  public String readTextCharByChar(InputStream is, String charset) throws IOException {
 
-		final StringBuilder sb = new StringBuilder();
+    final StringBuilder sb = new StringBuilder();
 
-		InputStreamReader isr = null;
-		BufferedReader br = null;
+    InputStreamReader isr = null;
+    BufferedReader br = null;
 
-		try {
+    try {
 
-			if (isNotBlank(charset)) {
-				isr = new InputStreamReader(is, charset);
-			} else {
-				isr = new InputStreamReader(is);
-			}
+      if (isNotBlank(charset)) {
+        isr = new InputStreamReader(is, charset);
+      } else {
+        isr = new InputStreamReader(is);
+      }
 
-			br = new BufferedReader(isr);
+      br = new BufferedReader(isr);
 
-			int iChar = br.read();
+      int iChar = br.read();
 
-			while (iChar != -1) {
-				sb.append((char) iChar);
-				iChar = br.read();
-			}
+      while (iChar != -1) {
+        sb.append((char) iChar);
+        iChar = br.read();
+      }
 
-		} finally {
+    } finally {
 
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-				}
-			}
-			if (isr != null) {
-				try {
-					isr.close();
-				} catch (IOException e) {
-				}
-			}
-			if (is != null) {
-				try {
-					is.close();
-				} catch (IOException e) {
-				}
-			}
-		}
-		return sb.toString();
+      if (br != null) {
+        try {
+          br.close();
+        } catch (IOException e) {
+        }
+      }
+      if (isr != null) {
+        try {
+          isr.close();
+        } catch (IOException e) {
+        }
+      }
+      if (is != null) {
+        try {
+          is.close();
+        } catch (IOException e) {
+        }
+      }
+    }
+    return sb.toString();
 
-	}
+  }
 
-	/**
-	 * Read whole text from file line by line
-	 * 
-	 * @param file
-	 * @return
-	 * @throws IOException
-	 */
-	public String readText(File file) throws IOException {
-		return readText(file, null);
-	}
+  /**
+   * Read whole text from file line by line
+   * 
+   * @param file
+   * @return
+   * @throws IOException
+   */
+  public String readText(File file) throws IOException {
+    return readText(file, null);
+  }
 
-	/**
-	 * Read whole text from file char by char
-	 * 
-	 * @param file
-	 * @param charset
-	 *            specify character set like 'UTF-8'
-	 * @return
-	 * @throws IOException
-	 */
-	public String readText(File file, String charset) throws IOException {
-		return readTextCharByChar(file, charset);
-	}
+  /**
+   * Read whole text from file char by char
+   * 
+   * @param file
+   * @param charset
+   *          specify character set like 'UTF-8'
+   * @return
+   * @throws IOException
+   */
+  public String readText(File file, String charset) throws IOException {
+    return readTextCharByChar(file, charset);
+  }
 
-	/**
-	 * Read whole text from file char by char
-	 * 
-	 * @param is
-	 * @param charset
-	 * @return
-	 * @throws IOException
-	 */
-	public String readText(InputStream is, String charset) throws IOException {
-		return readTextCharByChar(is, charset);
-	}
+  /**
+   * Read whole text from file char by char
+   * 
+   * @param is
+   * @param charset
+   * @return
+   * @throws IOException
+   */
+  public String readText(InputStream is, String charset) throws IOException {
+    return readTextCharByChar(is, charset);
+  }
 
-	/**
-	 * Read whole text from resource directory
-	 * 
-	 * @param clazz
-	 * @param fileName
-	 * @param charset
-	 * @return
-	 * @throws IOException
-	 * <br>
-	 * <code>
-	 * Example
-	 * tr.readTextFromResource(this.getClass(),"res.properties","UTF-8");
-	 * </code>
-	 */
-	public String readTextFromResource(Class<?> clazz, String fileName, String charset) throws IOException {
-		InputStream is = clazz.getResourceAsStream(fileName);
-		return readText(is, charset);
-	}
+  /**
+   * Read whole text from resource directory
+   * 
+   * @param clazz
+   * @param fileName
+   * @param charset
+   * @return
+   * @throws IOException
+   *           <br>
+   *           <code>
+   * Example
+   * tr.readTextFromResource(this.getClass(),"res.properties","UTF-8");
+   * </code>
+   */
+  public String readTextFromResource(Class<?> clazz, String fileName, String charset) throws IOException {
+    final InputStream is = clazz.getResourceAsStream(fileName);
+    return readText(is, charset);
+  }
 
-	/**
-	 * Read whole text as list from file line by line
-	 * 
-	 * @param file
-	 * @return
-	 * @throws IOException
-	 */
-	public List<String> readTextAsList(File file) throws IOException {
-		return readTextAsList(file, null);
-	}
+  /**
+   * Read whole text from resource directory as List<String>
+   * 
+   * @param clazz
+   * @param fileName
+   * @param charset
+   * @return
+   * @throws IOException
+   */
+  public List<String> readTextAsListFromResource(Class<?> clazz, String fileName, String charset, String newLine) throws IOException {
+    String text = readTextFromResource(clazz, fileName, charset);
+    String[] lines = text.split(newLine);
+    return Arrays.asList(lines);
 
-	/**
-	 * Read text as list from file line by line with range
-	 * 
-	 * @param file
-	 * @param beginLineNum
-	 *            line number starts with 0
-	 * @param endLineNum
-	 * @return
-	 * @throws IOException
-	 */
-	public List<String> readTextAsListWithRange(File file, int beginLineNum, int endLineNum) throws IOException {
-		return readTextAsListWithRange(file, null, beginLineNum, endLineNum);
-	}
+  }
 
-	/**
-	 * Read whole text as list from file line by line
-	 * 
-	 * @param file
-	 * @param charset
-	 *            specify character set like 'UTF-8'
-	 * @return
-	 * @throws IOException
-	 */
-	public List<String> readTextAsList(File file, String charset) throws IOException {
+  /**
+   * Read whole text as list from file line by line
+   * 
+   * @param file
+   * @return
+   * @throws IOException
+   */
+  public List<String> readTextAsList(File file) throws IOException {
+    return readTextAsList(file, null);
+  }
 
-		FileInputStream fis = new FileInputStream(file);
+  /**
+   * Read text as list from file line by line with range
+   * 
+   * @param file
+   * @param beginLineNum
+   *          line number starts with 0
+   * @param endLineNum
+   * @return
+   * @throws IOException
+   */
+  public List<String> readTextAsListWithRange(File file, int beginLineNum, int endLineNum) throws IOException {
+    return readTextAsListWithRange(file, null, beginLineNum, endLineNum);
+  }
 
-		return readTextAsList(fis, charset);
+  /**
+   * Read whole text as list from file line by line
+   * 
+   * @param file
+   * @param charset
+   *          specify character set like 'UTF-8'
+   * @return
+   * @throws IOException
+   */
+  public List<String> readTextAsList(File file, String charset) throws IOException {
 
-	}
+    FileInputStream fis = new FileInputStream(file);
 
-	/**
-	 * Read text as list from file line by line with range
-	 * 
-	 * @param file
-	 * @param charset
-	 *            specify character set like 'UTF-8'
-	 * @param beginLineNum
-	 *            line number starts with 0
-	 * @param endLineNum
-	 * @return
-	 * @throws IOException
-	 */
-	public List<String> readTextAsListWithRange(File file, String charset, int beginLineNum, int endLineNum) throws IOException {
+    return readTextAsList(fis, charset);
 
-		FileInputStream fis = new FileInputStream(file);
+  }
 
-		return readTextAsListWithRange(fis, charset, beginLineNum, endLineNum);
+  /**
+   * Read text as list from file line by line with range
+   * 
+   * @param file
+   * @param charset
+   *          specify character set like 'UTF-8'
+   * @param beginLineNum
+   *          line number starts with 0
+   * @param endLineNum
+   * @return
+   * @throws IOException
+   */
+  public List<String> readTextAsListWithRange(File file, String charset, int beginLineNum, int endLineNum) throws IOException {
 
-	}
+    FileInputStream fis = new FileInputStream(file);
 
-	/**
-	 * Read whole text as list from inputStream line by line
-	 * 
-	 * @param is
-	 * @param charset
-	 * @return
-	 * @throws IOException
-	 */
-	public List<String> readTextAsList(InputStream is, String charset) throws IOException {
-		return readTextAsListWithRange(is, charset, -1, -1);
-	}
+    return readTextAsListWithRange(fis, charset, beginLineNum, endLineNum);
 
-	/**
-	 * Read text as list from inputStream line by line with range
-	 * 
-	 * @param is
-	 * @param charset
-	 * @param beginLineNum
-	 *            line number starts with 0
-	 * @param endLineNum
-	 * @return
-	 * @throws IOException
-	 */
-	public List<String> readTextAsListWithRange(InputStream is, String charset, int beginLineNum, int endLineNum) throws IOException {
+  }
 
-		long crrReadingLineNum = 0;
+  /**
+   * Read whole text as list from inputStream line by line
+   * 
+   * @param is
+   * @param charset
+   * @return
+   * @throws IOException
+   */
+  public List<String> readTextAsList(InputStream is, String charset) throws IOException {
+    return readTextAsListWithRange(is, charset, -1, -1);
+  }
 
-		final List<String> lineList = new ArrayList<String>();
+  /**
+   * Read text as list from inputStream line by line with range
+   * 
+   * @param is
+   * @param charset
+   * @param beginLineNum
+   *          line number starts with 0
+   * @param endLineNum
+   * @return
+   * @throws IOException
+   */
+  public List<String> readTextAsListWithRange(InputStream is, String charset, int beginLineNum, int endLineNum) throws IOException {
 
-		if (beginLineNum < 0) {
-			beginLineNum = 0;
-		}
+    long crrReadingLineNum = 0;
 
-		if (beginLineNum > endLineNum) {
-			return lineList;
-		}
+    final List<String> lineList = new ArrayList<String>();
 
-		InputStreamReader isr = null;
-		BufferedReader br = null;
+    if (beginLineNum < 0) {
+      beginLineNum = 0;
+    }
 
-		try {
+    if (beginLineNum > endLineNum) {
+      return lineList;
+    }
 
-			if (isNotBlank(charset)) {
-				isr = new InputStreamReader(is, charset);
-			} else {
-				isr = new InputStreamReader(is);
-			}
+    InputStreamReader isr = null;
+    BufferedReader br = null;
 
-			br = new BufferedReader(isr);
+    try {
 
-			String line;
+      if (isNotBlank(charset)) {
+        isr = new InputStreamReader(is, charset);
+      } else {
+        isr = new InputStreamReader(is);
+      }
 
-			while ((line = br.readLine()) != null) {
+      br = new BufferedReader(isr);
 
-				boolean isSkip = false;
-				boolean isFinish = false;
+      String line;
 
-				if (beginLineNum <= crrReadingLineNum) {
-					isSkip = false;
-				} else {
-					isSkip = true;
-				}
+      while ((line = br.readLine()) != null) {
 
-				if (crrReadingLineNum <= endLineNum || endLineNum < 0) {
-					isFinish = false;
-				} else {
-					isFinish = true;
-				}
+        boolean isSkip = false;
+        boolean isFinish = false;
 
-				if (isFinish) {
-					break;
-				}
-				if (isSkip) {
+        if (beginLineNum <= crrReadingLineNum) {
+          isSkip = false;
+        } else {
+          isSkip = true;
+        }
 
-				} else {
-					lineList.add(line);
-				}
+        if (crrReadingLineNum <= endLineNum || endLineNum < 0) {
+          isFinish = false;
+        } else {
+          isFinish = true;
+        }
 
-				crrReadingLineNum++;
+        if (isFinish) {
+          break;
+        }
+        if (isSkip) {
 
-			}
+        } else {
+          lineList.add(line);
+        }
 
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-				}
-			}
-			if (isr != null) {
-				try {
-					isr.close();
-				} catch (IOException e) {
-				}
-			}
-			if (is != null) {
-				try {
-					is.close();
-				} catch (IOException e) {
-				}
-			}
-		}
-		return lineList;
-	}
+        crrReadingLineNum++;
 
-	/**
-	 * Returns true if string is not NULL and if length greater than 0.
-	 * 
-	 * @param str
-	 * @return
-	 */
-	private boolean isNotBlank(String str) {
+      }
 
-		if (str != null && !str.isEmpty()) {
-			return true;
-		}
-		return false;
-	}
+    } finally {
+      if (br != null) {
+        try {
+          br.close();
+        } catch (IOException e) {
+        }
+      }
+      if (isr != null) {
+        try {
+          isr.close();
+        } catch (IOException e) {
+        }
+      }
+      if (is != null) {
+        try {
+          is.close();
+        } catch (IOException e) {
+        }
+      }
+    }
+    return lineList;
+  }
+
+  /**
+   * Returns true if string is not NULL and if length greater than 0.
+   * 
+   * @param str
+   * @return
+   */
+  private boolean isNotBlank(String str) {
+
+    if (str != null && !str.isEmpty()) {
+      return true;
+    }
+    return false;
+  }
 }
