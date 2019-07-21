@@ -1,7 +1,25 @@
 # file-grabber
 Java lib for easy to handle and manipulate the text file
 
+# Write Text to Text File
+
+
+**Save file as UTF-8**
+
+```java
+		TextFileWriter w = new TextFileWriter();
+		w.writeText(file, string, "UTF-8", false);
+```
+
+**Save file as UTF8 with BOM**
+
+```java
+		TextFileWriter w = new TextFileWriter();
+		w.writeTextAsUTF8WithBOM(file, string, false);
+```
+
 # Read Text from Text File
+
 
 ## Read full text as String
 - org.riversun.file_grabber.TextFileReader.readText(File)
@@ -52,6 +70,6 @@ public class TextReaderExample {
 <dependency>
 		<groupId>org.riversun</groupId>
 		<artifactId>file-grabber</artifactId>
-		<version>0.3.0</version>
+		<version>1.0.0</version>
 </dependency>
 ```
