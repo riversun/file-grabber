@@ -174,4 +174,52 @@ public class TextFileWriter {
 		}
 		return true;
 	}
+
+	/**
+	 * Write text to TEXT file as UTF8 with BOM
+	 * 
+	 * @param file
+	 * @param text
+	 * @param charset
+	 * @param append
+	 */
+	public boolean writeTextAsUTF8WithBOM(File file, String text, boolean append) {
+
+		if (file == null) {
+			return false;
+		}
+
+		FileOutputStream fos = null;
+
+		try {
+
+			fos = new FileOutputStream(file, append);
+			// Write BOM
+			try {
+				fos.write(0xef);
+				fos.write(0xbb);
+				fos.write(0xbf);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			writeTextToStream(fos, text, "UTF-8");
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+
+		} finally {
+
+			if (fos != null) {
+				try {
+					fos.close();
+				} catch (IOException e) {
+				}
+			}
+		}
+
+		return true;
+
+	}
 }
